@@ -28,6 +28,7 @@ class HUGGING_FACE(BaseLLM):
         api_key: str | None = None,  # only if model is affiliated w/ private repo
     ) -> None:
 
+        print(f"######################API_KEY: {api_key}")
         # attempt to import neccessary libraries
         try:
             import transformers
@@ -52,6 +53,8 @@ class HUGGING_FACE(BaseLLM):
             )
 
         self.device = "cuda" if self.torch.cuda.is_available() else "cpu"
+
+        print(f"device: {self.device}")
 
         self.api_key = api_key
 
@@ -84,11 +87,17 @@ class HUGGING_FACE(BaseLLM):
         self.query_log = []
 
         # set model
+        # self.llm = AutoModelForCausalLM.from_pretrained(
+        #     pretrained_model_name_or_path=self.model_path,
+        #     device_map=self.device_map,
+        #     torch_dtype=self.dtype,
+        # ).to(self.device)
+
         self.llm = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=self.model_path,
             device_map=self.device_map,
             torch_dtype=self.dtype,
-        ).to(self.device)
+        )
 
     def _load_transformer(self):
         """Checks and loads model tokenizer/context length if exists."""
@@ -96,8 +105,10 @@ class HUGGING_FACE(BaseLLM):
         try:
             # lightweight check — will raise OSError if the model path is invalid
             if self.api_key:
+                print(f"Reached HEREEEEEE.......")
                 self.tokenizer = self.AutoTokenizer.from_pretrained(
-                    self.model_path, token=self.api_key
+                    self.model_path, token=self.api_key,
+                    use_auth_token = True
                 )
             else:
                 self.tokenizer = self.AutoTokenizer.from_pretrained(self.model_path)

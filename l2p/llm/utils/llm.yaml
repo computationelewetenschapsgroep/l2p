@@ -5,7 +5,7 @@
 #   {MODEL_NAME}:
 #     family: {FAMILY_NAME}
 #     engine: {MODEL_API_NAME}
-#     max_completion_tokens: 
+#     max_completion_tokens:
 #     temperature:
 #     top_p:
 #     context_length:
@@ -225,7 +225,7 @@ deepseek:
       stop:
     cost_usd_mtok:
       input: 0.035 # discount price (orig. $0.07 USD)
-      output: 0.550 # discount price (orig. $1.10 USD) 
+      output: 0.550 # discount price (orig. $1.10 USD)
   deepseek-r1:
     family: deepseek
     engine: deepseek-reasoner
@@ -413,6 +413,23 @@ huggingface:
       dtype: float16
       device_map: null
       ngpu: 1
+    cost_usd_mtok:
+      input: 0.30 # (when hosted on Azure)
+      output: 0.61 # (when hosted on Azure)
+  llama3.2-3b:
+    family: llama-3.2
+    engine: meta-llama/Llama-3.2-3B-Instruct
+    model_params:
+      context_length: 8192
+      max_new_tokens: 4096
+      temperature: 0.0
+      top_p: 1.0
+      do_sample: false
+      stop:
+    model_config:
+      dtype: float16
+      device_map: cpu
+      ngpu: 0
     cost_usd_mtok:
       input: 0.30 # (when hosted on Azure)
       output: 0.61 # (when hosted on Azure)
