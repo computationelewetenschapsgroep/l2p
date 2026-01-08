@@ -85,9 +85,14 @@ class DomainBuilder:
 
         types_str = pretty_print_dict(types) if types else "No types provided."
 
+         
+        #print(f"DomainBuilder: prompt_template: {prompt_template}")
+        
         prompt = prompt_template.replace("{domain_desc}", domain_desc).replace(
             "{types}", types_str
         )
+        
+        #print(f"DomainBuilder: @@@@@@@@@@@@@@prompt@@@@@@: {prompt}")
 
         # iterate through attempts in case of extraction failure
         for attempt in range(max_retries):

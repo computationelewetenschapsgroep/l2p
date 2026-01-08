@@ -63,10 +63,10 @@ class LLAMA(BaseLLM):
         content = response["message"]["content"] if "content" in response['message'] else str(response['message'])
         if "TYPES" in content:
             types_head = heading_parser(content, "TYPES")
-            print(f"#################types_head: {types_head}")
+            #print(f"#################types_head: {types_head}")
         elif "Action Parameters" in content:
             types_head = heading_parser(content, "Action Parameters")
-            print(f"#################action_params_head: {types_head}") 
+            #print(f"#################action_params_head: {types_head}") 
         else:
             types_head = None    #processed_content = __class__.remove_open_enclosure(content, "```")
         
@@ -89,11 +89,11 @@ class LLAMA(BaseLLM):
        messages  = []
        messages.append({"role": "system","content":system_prompt})
        messages.append({"role":"user","content":prompt}) 
-       print(f"messages: {messages}")
+       #print(f"messages: {messages}")
        r = requests.post(self.url, json={"model": self.llm, "messages": messages, "stream": False})
        
        result = r.json()
-       print(f"llm response: {result}")
+       #print(f"llm response: {result['message'].get('content','')}")
        return self.post_process_response(result)
 
     @override    
