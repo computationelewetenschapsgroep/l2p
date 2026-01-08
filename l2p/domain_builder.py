@@ -751,16 +751,16 @@ class DomainBuilder:
 
         # iterate through attempts in case of extraction failure
         for attempt in range(max_retries):
-            try:
-                model.reset_tokens()
+            #try:
+            model.reset_tokens()
 
-                llm_output = model.query(prompt=prompt)
+            llm_output = model.query(prompt=prompt)
 
-                # extract respective types from response
-                raw_actions = llm_output.split("## NEXT ACTION")
+            # extract respective types from response
+            raw_actions = llm_output.split("## NEXT ACTION")
 
-                actions = []
-                for i in raw_actions:
+            actions = []
+            for i in raw_actions:
                     # define the regex patterns
                     action_pattern = re.compile(r"\[([^\]]+)\]")
                     rest_of_string_pattern = re.compile(r"\[([^\]]+)\](.*)", re.DOTALL)
@@ -777,8 +777,8 @@ class DomainBuilder:
                         parse_action(llm_output=rest_of_string, action_name=action_name)
                     )
 
-                # if user queries predicate creation via LLM
-                try:
+            # if user queries predicate creation via LLM
+            try:
                     if extract_new_preds:
                         new_predicates = parse_new_predicates(llm_output)
                     else:
@@ -790,18 +790,18 @@ class DomainBuilder:
                             for pred in new_predicates
                             if pred["name"] not in [p["name"] for p in predicates]
                         ]  # remove re-defined predicates
-                except Exception as e:
+            except Exception as e:
                     print(f"No new predicates: {e}")
                     new_predicates = None
 
-                return actions, new_predicates, llm_output
+            return actions, new_predicates, llm_output
 
-            except Exception as e:
-                print(
-                    f"Error on attempt {attempt + 1}/{max_retries}: {e}\n"
-                    f"LLM Output:\n{llm_output if 'llm_output' in locals() else 'None'}\nRetrying...\n"
-                )
-                time.sleep(2)
+            # except Exception as e:
+            #     print(
+            #         f"Error on attempt {attempt + 1}/{max_retries}: {e}\n"
+            #         f"LLM Output:\n{llm_output if 'llm_output' in locals() else 'None'}\nRetrying...\n"
+            #     )
+            #     time.sleep(2)
 
         raise RuntimeError("Max retries exceeded. Failed to extract PDDL action.")
 

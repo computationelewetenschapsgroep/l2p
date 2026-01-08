@@ -127,3 +127,9 @@ success, plan_str = planner.run_fast_downward(
 
 print(plan_str)
 ```
+
+
+
+
+# Build Locally & Install
+```python3.10 -m pip install  .```
